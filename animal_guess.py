@@ -11,7 +11,7 @@ DATA_FILE = "zoo.dat"
 
 """This is an animal guessing game that learns as it runs.
 
-Copyright 2019 Andrew Lighten
+Copyright © 2019 Andrew Lighten
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -292,7 +292,7 @@ def sigint_handler(signum: int, _):
 
 # Setup the initial guss.
 root_node = load_data()
-dump_nodes(root_node, '', 0)
+# dump_nodes(root_node, '', 0)
 
 # Register Ctrl-C handler
 signal.signal(signal.SIGINT, sigint_handler)
