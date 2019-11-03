@@ -46,6 +46,7 @@ class Guess(Node):
     animal_name: str
 
     def __str__(self):
+        """Generate string representation."""
         return f"Guess({self.animal_name})"
 
 
@@ -64,6 +65,7 @@ class Question(Node):
     negative: Node
 
     def __str__(self):
+        """Generate string representation."""
         return f"Question({self.question})"
 
 
@@ -91,7 +93,7 @@ def get_yes_or_no(question: str) -> bool:
         elif 'no'.startswith(answer):
             return False
 
-        # Wrong
+        # Wrong, try again
         print("Please answer \"Yes\" or \"No\".")
 
 
@@ -146,7 +148,8 @@ def add_new_question(old_guess: Guess) -> (Question, Guess):
 
     # Create the new question node
     new_guess = Guess(parent=None, animal_name=new_animal_name)
-    new_question = Question(parent=None, question=question, positive=new_guess, negative=old_guess)
+    new_question = Question(parent=None, question=question,
+                            positive=new_guess, negative=old_guess)
 
     # Replace the question's negative path with the new question
     if old_guess.parent and isinstance(old_guess.parent, Question):
@@ -175,9 +178,11 @@ def get_question(old_animal_name: str, new_animal_name: str) -> str:
     :return: The question.
     """
     print("")
-    print(f"I need to know how to tell the difference between \"{new_animal_name}\" and \"{old_animal_name}\".")
+    print(
+        f"I need to know how to tell the difference between \"{new_animal_name}\" and \"{old_animal_name}\".")
     while True:
-        print(f"What statement would be TRUE for \"{new_animal_name}\" but NOT TRUE for \"{old_animal_name}\"? ", end="")
+        print(
+            f"What statement would be TRUE for \"{new_animal_name}\" but NOT TRUE for \"{old_animal_name}\"? ", end="")
         question = input().strip()
         if not question:
             continue
@@ -186,7 +191,8 @@ def get_question(old_animal_name: str, new_animal_name: str) -> str:
             question = question[:-1]
 
         print("")
-        print(f"So if I asked you \"{question}?\", your answer would be true for \"{new_animal_name}\", but false for \"{old_animal_name}\".")
+        print(
+            f"So if I asked you \"{question}?\", your answer would be true for \"{new_animal_name}\", but false for \"{old_animal_name}\".")
 
         if get_yes_or_no("Is that right?"):
             return question
@@ -284,7 +290,7 @@ def sigint_handler(signum: int, _):
     sys.exit(0)
 
 
-# Setup the initial guess.
+# Setup the initial guss.
 root_node = load_data()
 dump_nodes(root_node, '', 0)
 
