@@ -105,7 +105,8 @@ def do_guess(guess: Guess):
     """
 
     # Ask the user if we've guessed right.
-    new_question = "Is your animal a " + guess.animal_name + "?"
+    indefinite_article = "an" if guess.animal_name[0] in "aeiou" else "a"
+    new_question = "Is your animal " + indefinite_article + " " + guess.animal_name + "?"
     if get_yes_or_no(new_question):
         print()
         print(colored("Yay! I guessed right!", "green"))
@@ -178,11 +179,9 @@ def get_question(old_animal_name: str, new_animal_name: str) -> str:
     :return: The question.
     """
     print("")
-    print(
-        f"I need to know how to tell the difference between \"{new_animal_name}\" and \"{old_animal_name}\".")
+    print(f"I need to know how to tell the difference between \"{new_animal_name}\" and \"{old_animal_name}\".")
     while True:
-        print(
-            f"What statement would be TRUE for \"{new_animal_name}\" but NOT TRUE for \"{old_animal_name}\"? ", end="")
+        print(f"What statement would be TRUE for \"{new_animal_name}\" but NOT TRUE for \"{old_animal_name}\"? ", end="")
         question = input().strip()
         if not question:
             continue
@@ -191,8 +190,7 @@ def get_question(old_animal_name: str, new_animal_name: str) -> str:
             question = question[:-1]
 
         print("")
-        print(
-            f"So if I asked you \"{question}?\", your answer would be true for \"{new_animal_name}\", but false for \"{old_animal_name}\".")
+        print(f"So if I asked you \"{question}?\", your answer would be true for \"{new_animal_name}\", but false for \"{old_animal_name}\".")
 
         if get_yes_or_no("Is that right?"):
             return question
@@ -256,6 +254,38 @@ def dump_nodes(node: Node, prefix: str, depth: int):
         dump_nodes(node.negative, "Negative", depth + 1)
 
 
+def count_animals() -> int:
+    """
+    Count the number of animals we know about.
+
+    This will walk the tree and return an integer representing the number of
+    animals we know about.
+
+    Returns:
+        int: The number of animals we know about.
+    """
+    return count_animals_in_node(root_node)
+
+
+def count_animals_in_node(node: Node) -> int:
+    """
+    Count the number of animals in a sub-tree.
+
+    This will walk a specified subtree and return an integer representing the
+    number of animals we know about.
+
+    Args:
+        node (Node): The subtree to walk
+
+    Returns:
+        int: The number of animals in the subtree.
+    """
+    if isinstance(node, Guess):
+        return 1
+    elif isinstance(node, Question):
+        return count_animals_in_node(node.positive) + count_animals_in_node(node.negative)
+
+
 def save_data():
     """
     Save our data to a file.
@@ -268,7 +298,6 @@ def load_data() -> Node:
     """
     Load our data from a file.
     """
-
     try:
         with open(DATA_FILE, mode="rb") as f:
             return pickle.load(f)
@@ -299,6 +328,7 @@ signal.signal(signal.SIGINT, sigint_handler)
 
 # Run the game.
 print("")
+print("I know about " + str(count_animals()) + " different animals.")
 print("------------------------------------------------------")
 print("Think of an animal, and I'll try and guess what it is.")
 play(root_node)
