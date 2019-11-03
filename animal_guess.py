@@ -6,13 +6,30 @@ from termcolor import colored
 
 import pickle
 
+# File we persist our data in (using pickling).
 DATA_FILE = "zoo.dat"
+
+"""This is an animal guessing game that learns as it runs.
+
+Copyright 2019 Andrew Lighten
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License."""
 
 
 @dataclass
 class Node:
     """
-    This glass represents a generic node.
+    This class represents a generic node.
     """
 
     # Our parent node.
@@ -254,6 +271,12 @@ def load_data() -> Node:
 
 
 def sigint_handler(signum: int, _):
+    """
+    Handle an interrupt signal by terminating the python interpreter.
+
+    :param signum: The signal number.
+    :param _: The stack trace (ignored).
+    """
     print("")
     print("")
     print(colored("Ok, bye for now.", "blue"))
@@ -263,12 +286,12 @@ def sigint_handler(signum: int, _):
 
 # Setup the initial guess.
 root_node = load_data()
+dump_nodes(root_node, '', 0)
 
 # Register Ctrl-C handler
 signal.signal(signal.SIGINT, sigint_handler)
 
-# Loop forever.while True:
-
+# Run the game.
 print("")
 print("------------------------------------------------------")
 print("Think of an animal, and I'll try and guess what it is.")
